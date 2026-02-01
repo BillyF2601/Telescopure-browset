@@ -30,7 +30,8 @@ jobs:
           -exportPath build
 
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
+        
         with:
           name: Telescopure-IPA
           path: build/*.ipa
