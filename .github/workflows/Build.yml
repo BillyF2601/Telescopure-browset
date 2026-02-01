@@ -1,0 +1,36 @@
+name: Build iOS Browser
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build App
+        run: |
+          xcodebuild \
+          -project Telescopure.xcodeproj \
+          -scheme Telescopure \
+          -sdk iphoneos \
+          -configuration Release \
+          archive \
+          -archivePath build/Telescopure.xcarchive
+
+      - name: Export IPA
+        run: |
+          xcodebuild \
+          -exportArchive \
+          -archivePath build/Telescopure.xcarchive \
+          -exportOptionsPlist exportOptions.plist \
+          -exportPath build
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: Telescopure-IPA
+          path: build/*.ipa
